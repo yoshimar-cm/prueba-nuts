@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -13,7 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::orderByDesc('created_at')->get();
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -29,7 +31,24 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        dd($request);
+        if ($request->hasFile('video')) {
+            $video = $request->file('video')->store('products-videos','public');
+        }
+        $product = Product::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'description' => $request->name,
+            'video' => $video
+        ]);
+
+        foreach ($request->images as $image) {
+            $path = $image->store('products-images','public');
+            $product->images()->create([
+                'name' => $path
+            ]);
+        }
+
+        return redirect()->route('products.index');
     }
 
     /**
