@@ -73,10 +73,10 @@
                     file:bg-blue-200 file:text-blue-800
                     hover:file:bg-blue-300
                     "/>
-                <div class="grid grid-cols-4">
+                <div class="flex gap-2 mt-2">
                     @foreach ($product->images as $image)
-                        <div>
-                            {{$image->name}}
+                        <div class="w-24">
+                            <img class="w-full rounded" src="{{ asset("storage/$image->name") }}" alt="">
                         </div>
                     @endforeach
                 </div>
@@ -85,7 +85,7 @@
                 @enderror
             </div>
 
-            <button class="bg-blue-700 text-white py-3 px-10 rounded font-bold mt-8" type="submit">Guardar</button>
+            <button class="bg-blue-700 text-white py-3 px-10 rounded font-bold mt-8" type="submit">Guardar cambios</button>
 
         </form>
     </div>

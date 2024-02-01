@@ -14,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderByDesc('created_at')->get();
+        $products = auth()->user()->products()->orderByDesc('created_at')->get();
         return view('products.index', compact('products'));
     }
 
@@ -34,7 +34,8 @@ class ProductController extends Controller
         if ($request->hasFile('video')) {
             $video = $request->file('video')->store('products-videos','public');
         }
-        $product = Product::create([
+
+        $product = auth()->user()->products()->create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'description' => $request->name,
@@ -72,7 +73,27 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+
+        if ($request->hasFile('video')) {
+            $video = $request->file('video')->store('products-videos','public');
+            $product->video = $video;
+        }
+
+        $product->name = $request->name;
+        $product->description = $request->description;
+
+        $product->save();
+
+        if ($request->hasFile('images')) {
+            foreach ($request->images as $image) {
+                $path = $image->store('products-images','public');
+                $product->images()->create([
+                    'name' => $path
+                ]);
+            }
+        }
+
+        return redirect()->route('products.show', $product);
     }
 
     /**
@@ -80,6 +101,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
     }
 }

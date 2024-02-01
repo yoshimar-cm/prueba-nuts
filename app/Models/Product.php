@@ -13,11 +13,16 @@ class Product extends Model
         'name',
         'slug',
         'description',
-        'video'
+        'video',
+        'user_id'
     ];
 
     public function getRouteKeyName(){
         return 'slug';
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     public function images(){

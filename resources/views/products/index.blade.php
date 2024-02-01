@@ -19,7 +19,7 @@
                     </div>
                 </a>
             @empty
-
+                <i>No exiten productos registrados</i>
             @endforelse
         </div>
     </div>
