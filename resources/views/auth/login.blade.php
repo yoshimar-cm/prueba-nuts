@@ -44,4 +44,9 @@
             </x-primary-button>
         </div>
     </form>
+
+    <hr class="my-8">
+
+    <x-ui.auth-social-network/>
+
 </x-guest-layout>
