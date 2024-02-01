@@ -24,7 +24,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('products', ProductController::class);
+
 
 // socialite
 Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
@@ -32,6 +32,9 @@ Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.ca
 
 
 Route::middleware('auth')->group(function () {
+
+    Route::resource('products', ProductController::class);
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
