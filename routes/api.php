@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Passport\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,9 @@ Route::middleware('auth:api')->group(function(){
     Route::post('products', [ProductController::class, 'create'])->name('api.v1.products.create');
     Route::put('products/{product}/edit', [ProductController::class, 'update'])->name('api.v1.products.update');
     Route::delete('products/{product}', [ProductController::class, 'delete'])->name('api.v1.products.delete');
+
+    Route::get('users/me',[UserController::class, 'show'])->name('api.v1.users.show');
+    Route::put('users/update',[UserController::class, 'update'])->name('api.v1.users.update');
+    Route::delete('users/delete',[UserController::class, 'delete'])->name('api.v1.users.delete');
 });
 

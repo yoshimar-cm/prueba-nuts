@@ -16,7 +16,7 @@ class ProductController extends Controller
 
     public function index(): ProductCollection
     {
-        $products = Product::all();
+        $products = auth()->user()->products()->orderByDesc('created_at')->get();
         return ProductCollection::make($products);
     }
 
@@ -39,7 +39,7 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name),
             'description' => $request->description,
             'video' => $video,
-            'user_id' => 1
+            'user_id' => auth()->user()->id
         ]);
 
         foreach ($request->images as $image) {
@@ -57,7 +57,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest  $request, Product $product):  ProductResource
     {
 
-        dd($request);
+
 
         if ($request->hasFile('video')) {
             $video = $request->file('video')->store('products-videos','public');

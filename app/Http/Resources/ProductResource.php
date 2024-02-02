@@ -22,7 +22,8 @@ class ProductResource extends JsonResource
                 'slug' => $this->resource->slug,
                 'description' => $this->resource->description,
                 'video' => asset("storage/{$this->resource->video}"),
-                'images' => ProductImageResource::collection($this->resource->images)
+                'images' => ProductImageResource::collection($this->resource->images),
+                'created_at' => $this->resource->created_at,
             ],
             'links' => [
                 'self' => route('api.v1.products.show', $this->resource)

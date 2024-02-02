@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Passport;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\CreateUserRequest;
+use App\Http\Requests\Api\LoginUserRequest;
 use Illuminate\Http\Request;
 
-use Illuminate\Validation\Rules;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,15 +14,8 @@ class AuthController extends Controller
 {
 
 
-    public function register(Request $request)
+    public function register(CreateUserRequest $request)
     {
-
-        // $request->validate([
-        //     'name' => ['required', 'string', 'max:255'],
-        //     'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-        //     'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        // ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -38,7 +32,7 @@ class AuthController extends Controller
     /**
      * Undocumented function
      */
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
         $credentials = [
             'email' => $request->email,
