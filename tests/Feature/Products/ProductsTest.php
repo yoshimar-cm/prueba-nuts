@@ -25,7 +25,7 @@ class ProductsTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $product = Product::factory()->create();
+        $product = Product::factory()->create(['user_id'=> $user->id]);
 
         $response = $this->get(route('products.show', $product));
 
