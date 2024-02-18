@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
 
-
-    public function register(CreateUserRequest $request)
+    /**
+     * [Crear nueva cuenta]
+     * Crea un nuevo usuario y regresa un token
+     */
+    public function signup(CreateUserRequest $request)
     {
         $user = User::create([
             'name' => $request->name,
@@ -24,13 +27,14 @@ class AuthController extends Controller
 
         $token = $user->createToken('Token')->accessToken;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json(['token' => $token], 201);
     }
 
 
 
     /**
-     * Undocumented function
+     * [iniciar sesión]
+     * Obtiene la información, busca el usuario y regresa un token
      */
     public function login(LoginUserRequest $request)
     {
@@ -41,7 +45,7 @@ class AuthController extends Controller
 
         if(auth()->attempt($credentials)){
             $token = auth()->user()->createToken('Token')->accessToken;
-            return response()->json(['token' => $token], 200);
+            return response()->json(['token' => $token], 201);
         }else{
             return response()->json(['error' => 'Incorrect credentials'], 404);
         }
@@ -52,14 +56,14 @@ class AuthController extends Controller
 
 
     /**
-     * Undocumented function
+     * [Cerrar sesion]
+     * Optiene el token del usuario actual y retira el token
      */
     public function logout()
     {
         $token = auth()->user()->token();
-
         $token->revoke();
 
-        return response()->json(['success' => 'Logout successfully'], 200);
+        return response()->json(['message' => 'Successfully logged out'], 200);
     }
 }

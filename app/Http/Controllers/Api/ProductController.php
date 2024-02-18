@@ -8,21 +8,35 @@ use App\Http\Requests\Api\UpdateProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
 
+
+    /**
+     * [Listado de productos]
+     * Muestra el listado e productos registrados por el usuario
+     */
     public function index(): ProductCollection
     {
-        $products = auth()->user()->products()->orderByDesc('created_at')->get();
+        $products = auth()->user()
+                    ->products()
+                    ->orderByDesc('created_at')
+                    ->get();
+
         return ProductCollection::make($products);
     }
 
-
+    /**
+     *
+     */
     public function show(Product $product): ProductResource
     {
+        $this->authorize('author', $product);
+
         return ProductResource::make($product);
     }
 
@@ -57,6 +71,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest  $request, Product $product):  ProductResource
     {
 
+        $this->authorize('author', $product);
 
 
         if ($request->hasFile('video')) {
@@ -85,6 +100,8 @@ class ProductController extends Controller
 
     public function delete(Product $product)
     {
+        $this->authorize('author', $product);
+
         $product->delete();
 
         return response()->json([

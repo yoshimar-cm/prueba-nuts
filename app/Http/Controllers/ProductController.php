@@ -57,6 +57,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $this->authorize('author', $product);
+
         return view('products.show', compact('product'));
     }
 
@@ -65,6 +67,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $this->authorize('author', $product);
+
         return view('products.edit', compact('product'));
     }
 
@@ -73,6 +77,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
+        $this->authorize('author', $product);
 
         if ($request->hasFile('video')) {
             $video = $request->file('video')->store('products-videos','public');
@@ -101,6 +106,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $this->authorize('author', $product);
+
         $product->delete();
+        return redirect()->route('products.index');
     }
 }
